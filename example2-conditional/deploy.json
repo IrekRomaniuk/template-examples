@@ -89,13 +89,14 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "[concat('vnp-', copyIndex())]",
-           
+            "condition": "[greater(length(parameters('virtualNetworkPeerings')), 0)]",
             "dependsOn": [
               "firstVNet", "secondVNet"
             ],
             "copy": {
                 "name": "iterator",
-                "count": "[length(variables('peerings'))]"
+                "count": "[length(variables('peerings'))]",
+                "mode": "serial"
             },
             "properties": {
               "mode": "Incremental",
